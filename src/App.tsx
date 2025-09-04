@@ -1,14 +1,25 @@
 import './index.css'
+//import CustomeButton from './components/CustomeButton'
+import RegisterForm from './components/RegisterForm.tsx';
+import LoginForm from './components/LoginForm.tsx';
+import { Routes, Route } from 'react-router-dom';
+
 
 function App() {
+  
+  
   
 
   return (
     <>
-    <h1 className="text-3xl font-bold  w-full text-center h-screen flex items-center justify-center">Back </h1>
-    
+    <Routes>
+        <Route path="/" element={<RegisterForm />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/about" element={<LoginForm />} />
+    </Routes>
     </>
-  )
+    
+  );
 }
 
 export default App
