@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import { Link, useNavigate  } from "react-router-dom";
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -11,6 +12,7 @@ const SignUp = () => {
     const [coverImage, setCoverImage] = useState<File | null>(null);
     const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
     const [coverImageUrl, setCoverImageUrl] = useState<string | null>(null);
+    const navigate = useNavigate();
 
 
     const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -51,18 +53,28 @@ const SignUp = () => {
         if (coverImage) {
             formData.append("coverImage", coverImage);
         }
+        
 
-        axios.post('https://backend-1-02dj.onrender.com/api/v1/users/register', formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            }
-        )
-            .then(response => {
+       try {
+          axios.post('https://backend-1-02dj.onrender.com/api/v1/users/register', formData,
+             {
+                 headers: {
+                     'Content-Type': 'multipart/form-data'
+                 }
+             }
+         ).then(response => {
                 console.log(response.data);
+                alert("User registered successfully!");
+                navigate("/login");
+
             })
-            .catch(error => {
+
+             
+       } catch (error: any) {
+        
+       
+           
+           
                 if (error.response) {
                     // The request was made and the server responded with a status code
                     // that falls out of the range of 2xx
@@ -80,9 +92,11 @@ const SignUp = () => {
                     console.error('Error:', error.message);
                     alert('An unexpected error occurred. Please try again.');
                 }
-            });
+            };
+            
+        }
 
-    }
+    
 
     return (
 
@@ -91,7 +105,7 @@ const SignUp = () => {
                 <h1 className="mb-6 text-center text-3xl font-bold border-b border-green-800 pb-4">Sign Up</h1>
                 <form onSubmit={submitHandler}>
                     <div className="space-y-4">
-                         <input
+                        <input
                             onChange={(e) => { setFullName(e.target.value) }}
                             id="fullName"
                             name="fullName"
@@ -208,7 +222,13 @@ const SignUp = () => {
                             className="mt-4 bg-green-800 text-white py-2 rounded hover:bg-green-600 w-full">
                             Sign Up
                         </button>
+
                     </div>
+                    <br />
+                    <div className="flex justify-center items-center">
+                    <Link to="/login">Account Already Exists</Link>
+                    </div>
+
                 </form>
             </div>
         </div>
