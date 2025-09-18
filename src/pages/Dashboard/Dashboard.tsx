@@ -22,6 +22,7 @@ const Dashboard = () => {
         
         <nav className="mt-8 w-full px-4">
           <ul className="space-y-3">
+            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Home</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Dashboard</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Profile</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Settings</li>
