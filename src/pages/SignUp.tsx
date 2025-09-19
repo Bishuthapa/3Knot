@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useState } from "react";
 import { Link, useNavigate  } from "react-router-dom";
+import API from "../services/api";
 
 const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -56,7 +56,7 @@ const SignUp = () => {
         
 
        try {
-          axios.post('https://backend-1-02dj.onrender.com/api/v1/users/register', formData,
+          API.post('/users/register', formData,
              {
                  headers: {
                      'Content-Type': 'multipart/form-data'

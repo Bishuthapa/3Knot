@@ -1,7 +1,8 @@
 import { useState } from "react";
-import axios, { AxiosError } from "axios";
+import API from "../services/api";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import type { AxiosError } from "axios";
 
 const Login = () => {
   const [identifier, setIdentifier] = useState("");
@@ -18,8 +19,8 @@ const Login = () => {
       : { username: identifier, password };
 
     try {
-      const res = await axios.post(
-        "https://backend-1-02dj.onrender.com/api/v1/users/login",
+      const res = await API.post(
+        "/users/login",
         payload
       );
       //console.log("Login successful:", res.data);
