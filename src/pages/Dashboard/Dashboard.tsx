@@ -1,5 +1,31 @@
+import API from "../../services/api";
+import { useEffect, useState } from "react";
+
+
+interface VideoOwner {
+  avatar: string;
+  username: string;
+}
+
+interface Video {
+  _id: string;
+  thumbnail: string;
+  title: string;
+  description: string;
+  owner: VideoOwner;
+  createdAt: string; // or Date
+}
+
 const Dashboard = () => {
   const avatar = localStorage.getItem("Avatar");
+  const [videos, setVideos] = useState<Video[]>([]);
+
+  useEffect(() => {
+  API.get("/videos")
+    .then((res) => setVideos(res.data.data.videos))
+    .catch((err) => console.error(err));
+}, []);
+
 
   return (
     <div className="dashboard-container flex h-screen w-full">
@@ -19,22 +45,54 @@ const Dashboard = () => {
           )}
         </div>
 
-        
         <nav className="mt-8 w-full px-4">
           <ul className="space-y-3">
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Home</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Dashboard</li>
-            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Profile</li>
-            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Settings</li>
+            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Your Videos</li>
+            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Upload</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Logout</li>
           </ul>
         </nav>
       </div>
 
-      
-      <div className="dashboard-content flex-1 bg-slate-900 p-6 text-white overflow-y-auto">
-        <h1 className="text-2xl font-bold mb-4">Welcome to the Dashboard</h1>
-        <p className="text-gray-300">Here’s where your main content will go.</p>
+      {/* Main Content */}
+      <div className="bg-gray-900 min-h-screen p-6 flex-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          {videos.map((video) => (
+            <div
+              key={video._id}
+              className="bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition duration-300"
+            >
+              {/* Thumbnail */}
+              <img
+                src={video.thumbnail}
+                alt={video.title}
+                className="w-full h-48 object-cover"
+              />
+
+              {/* Video Info */}
+              <div className="flex p-3">
+                {/* Owner Avatar */}
+                <img
+                  src={video.owner?.avatar}
+                  alt={video.owner?.username}
+                  className="w-10 h-10 rounded-full mr-3 object-cover"
+                />
+
+                <div className="flex flex-col">
+                  <h3 className="text-white font-semibold text-sm truncate">
+                    {video.title}
+                  </h3>
+                  <p className="text-gray-400 text-xs">
+                    {video.owner?.username || "Unknown"}
+                  </p>
+                 
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
