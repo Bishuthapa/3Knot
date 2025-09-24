@@ -1,5 +1,6 @@
 import API from "../../services/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 interface VideoOwner {
@@ -9,6 +10,7 @@ interface VideoOwner {
 
 interface Video {
   _id: string;
+  video: string;
   thumbnail: string;
   title: string;
   description: string;
@@ -16,15 +18,22 @@ interface Video {
   createdAt: string; // or Date
 }
 
+
 const Dashboard = () => {
+  const navigate = useNavigate();
   const avatar = localStorage.getItem("Avatar");
   const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
+
   API.get("/videos")
-    .then((res) => setVideos(res.data.data.videos))
+    .then((res) => {
+      console.log(res.data.data.videos);
+      setVideos(res.data.data.videos)})
     .catch((err) => console.error(err));
+    
 }, []);
+
 
 
   return (
@@ -58,11 +67,16 @@ const Dashboard = () => {
 
       {/* Main Content */}
       <div className="bg-gray-900 min-h-screen p-6 flex-1">
+        <div className="">
+
+      </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {videos.map((video) => (
             <div
               key={video._id}
               className="bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition duration-300"
+              onClick={() => navigate(`/watch/${video._id}`, { state: video })}
+
             >
               {/* Thumbnail */}
               <img

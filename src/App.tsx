@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard.tsx';
 import { Toaster } from "react-hot-toast";
 import Home from './pages/Dashboard/Home.tsx';
+import Watch  from './pages/watch.tsx';
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/Home" element={<Home />} />
+        <Route path='/watch/:_id' element={<Watch />} />
 
     </Routes>
     <Toaster position="top-center" reverseOrder={false} />
