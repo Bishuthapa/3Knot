@@ -34,6 +34,13 @@ const Dashboard = () => {
     
 }, []);
 
+useEffect(() => {
+
+  API.get("/videos?search=${query}")
+  
+})
+
+//const [query, setQuery] = useState(''); // State to store the search query
 
 
   return (
@@ -59,17 +66,27 @@ const Dashboard = () => {
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Home</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Dashboard</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Your Videos</li>
-            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Upload</li>
-            <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Logout</li>
+            <li onClick={() => navigate("/upload")}className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Upload</li>
+            <li onClick={() => {
+              alert("are you sure want to logout");
+              localStorage.removeItem('mytoken');
+              localStorage.removeItem('userId');
+              localStorage.removeItem('CoverImage');
+              localStorage.removeItem('Avatar');
+              navigate('/login');
+            }
+            
+
+            } 
+            
+            className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Logout</li>
           </ul>
         </nav>
       </div>
 
       {/* Main Content */}
       <div className="bg-gray-900 min-h-screen p-6 flex-1">
-        <div className="">
-
-      </div>
+        
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {videos.map((video) => (
             <div
