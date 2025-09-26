@@ -2,7 +2,6 @@ import API from "../../services/api";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
 interface VideoOwner {
   avatar: string;
   username: string;
@@ -21,7 +20,6 @@ interface Video {
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const avatar = localStorage.getItem("Avatar");
   const [videos, setVideos] = useState<Video[]>([]);
 
   useEffect(() => {
@@ -46,20 +44,9 @@ useEffect(() => {
   return (
     <div className="dashboard-container flex h-screen w-full">
       {/* Sidebar */}
-      <div className="side-nav bg-slate-700 w-64 flex flex-col items-center py-6">
-        <div className="profile-container flex flex-col items-center w-24 h-24 rounded-full border border-gray-500 overflow-hidden">
-          {avatar ? (
-            <img
-              src={avatar}
-              alt="avatar-image"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="flex items-center justify-center w-full h-full text-gray-400 text-xs">
-              No Avatar
-            </div>
-          )}
-        </div>
+      <div className="side-nav bg-slate-900 w-64 flex flex-col items-center py-1">
+        
+       
 
         <nav className="mt-8 w-full px-4">
           <ul className="space-y-3">
@@ -67,19 +54,6 @@ useEffect(() => {
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Dashboard</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Your Videos</li>
             <li onClick={() => navigate("/upload")}className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Upload</li>
-            <li onClick={() => {
-              alert("are you sure want to logout");
-              localStorage.removeItem('mytoken');
-              localStorage.removeItem('userId');
-              localStorage.removeItem('CoverImage');
-              localStorage.removeItem('Avatar');
-              navigate('/login');
-            }
-            
-
-            } 
-            
-            className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Logout</li>
           </ul>
         </nav>
       </div>
