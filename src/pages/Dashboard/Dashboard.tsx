@@ -53,7 +53,6 @@ useEffect(() => {
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Home</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Dashboard</li>
             <li className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Your Videos</li>
-            <li onClick={() => navigate("/upload")}className="text-white hover:bg-slate-600 p-2 rounded cursor-pointer">Upload</li>
           </ul>
         </nav>
       </div>
