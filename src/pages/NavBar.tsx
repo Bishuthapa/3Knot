@@ -2,9 +2,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
 const Navbar = () => {
   const navigate = useNavigate();
   const [avatar, setAvatar] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const userAvatar = localStorage.getItem("Avatar");
@@ -13,9 +15,19 @@ const Navbar = () => {
 
   const logoutHandler = () => {
     localStorage.clear();
-    toast.error('Logout successful 🎉', {duration: 3000, style: {background: '#16a34a', color: '#fff',}});
+    toast.error("Logout successful 🎉", {
+      duration: 3000,
+      style: { background: "#16a34a", color: "#fff" },
+    });
 
     navigate("/login");
+  };
+
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (searchTerm.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchTerm)}`);
+    }
   };
 
   return (
@@ -28,18 +40,24 @@ const Navbar = () => {
       </div>
 
       {/* Middle Section (Search Bar) */}
-      <div className="flex flex-1 justify-center">
+      <form
+        onSubmit={handleSearch}
+        className="flex flex-1 justify-center"
+      >
         <input
           type="text"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search"
           className="w-1/2 px-4 py-2 rounded-l bg-slate-900 border border-gray-600 focus:outline-none"
         />
-        <button className="bg-green-700 px-4 py-2 rounded-r hover:bg-green-600">
+        <button
+          type="submit"
+          className="bg-green-700 px-4 py-2 rounded-r hover:bg-green-600"
+        >
           🔍
         </button>
-      </div>
-
-      
+      </form>
 
       {/* Right Section (Upload + Avatar) */}
       <div className="flex items-center gap-4">
@@ -49,12 +67,12 @@ const Navbar = () => {
         >
           ⬆ Upload
         </Link>
-         <button className="bg-green-800 px-3 py-1 mr-4 rounded hover:bg-green-700"
-        onClick={logoutHandler}
-      >
+        <button
+          className="bg-green-800 px-3 py-1 mr-4 rounded hover:bg-green-700"
+          onClick={logoutHandler}
+        >
           Logout
-
-      </button>
+        </button>
 
         {avatar ? (
           <img
@@ -64,12 +82,10 @@ const Navbar = () => {
           />
         ) : (
           <div className="flex items-center justify-center w-full h-full text-gray-400 text-xs">
-              No Avatar
-            </div>
+            No Avatar
+          </div>
         )}
       </div>
-
-     
     </nav>
   );
 };
