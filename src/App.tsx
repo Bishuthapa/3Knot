@@ -6,6 +6,7 @@ import { Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard/Dashboard.tsx';
 import { Toaster } from "react-hot-toast";
 import Home from './pages/Dashboard/Home.tsx';
+import YourVideos from './pages/Dashboard/yourVideos.tsx';
 import Watch  from './pages/watch.tsx';
 import Upload from './pages/Dashboard/Upload.tsx';
 import NotValidUser from './pages/NotValidUser.tsx';
@@ -31,6 +32,7 @@ function App() {
       <Route element={<ProtectedLayout />}>
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/Home" element={<Home />} />
+        <Route path="/YourVideos" element={<YourVideos />} />
         <Route path='/watch/:_id' element={<Watch />} />
         <Route path='/upload' element={<Upload />} />
       </Route>
