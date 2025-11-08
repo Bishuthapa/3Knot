@@ -27,14 +27,27 @@ interface Video {
 const YourVideos = () => {
   const navigate = useNavigate();
   const [videos, setVideos] = useState<Video[]>([]);
-  const [isOpen, setIsOpen] = useState(false); // sidebar toggle
-  // Fetch videos
-  useEffect(() => {
-    API.get("/videos")
-      .then((res) => setVideos(res.data.data.videos))
-      .catch((err) => console.error(err));
-  }, []);
+  const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
+
+const userId = localStorage.getItem("userId"); // get the logged-in user's ID
+
+  // Fetch your videos only
+  useEffect(() => {
+    const fetchYourVideos = async () => {
+      try {
+        const res = await API.get(`/videos/user/${userId}`);
+        setVideos(res.data.data.videos || []);
+      } catch (err) {
+        console.error("Error fetching your videos:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchYourVideos();
+  }, [userId]);
 
   const menuItems = [
     { name: "Home", icon: HomeIcon, path: "/Dashboard" },
@@ -44,7 +57,7 @@ const YourVideos = () => {
 
   const handleNavigation = (path: string) => {
     navigate(path);
-    setIsOpen(false); // Close sidebar on mobile after navigation
+    setIsOpen(false);
   };
 
   return (
@@ -90,61 +103,55 @@ const YourVideos = () => {
 
       {/* Main Content */}
       <div className="bg-gray-900 min-h-screen flex-1 p-4 md:p-6 overflow-y-auto">
-        {/* Top bar */}
         <div className="flex items-center justify-between mb-6">
-          {/* Hamburger (mobile only) */}
           <button
             className="md:hidden text-white"
             onClick={() => setIsOpen(true)}
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
-
-          
+          <h2 className="text-white text-xl font-bold">Your Uploaded Videos</h2>
         </div>
 
-        {/* Videos grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {videos.map((video) => (
-            <div
-              key={video._id}
-              className="bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition duration-300 cursor-pointer"
-              onClick={() => navigate(`/watch/${video._id}`, { state: video })}
-            >
-              {/* Thumbnail */}
-              <img
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-40 sm:h-48 object-cover"
-              />
-
-              {/* Video Info */}
-              <div className="flex p-3">
+        {/* Video Grid */}
+        {loading ? (
+          <p className="text-gray-400 text-center">Loading...</p>
+        ) : videos.length === 0 ? (
+          <p className="text-gray-400 text-center">
+            You haven’t uploaded any videos yet.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {videos.map((video) => (
+              <div
+                key={video._id}
+                className="bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition duration-300 cursor-pointer"
+                onClick={() => navigate(`/watch/${video._id}`, { state: video })}
+              >
                 <img
-                  src={video.owner?.avatar}
-                  alt={video.owner?.username}
-                  className="w-10 h-10 rounded-full mr-3 object-cover"
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-full h-40 sm:h-48 object-cover"
                 />
-                <div className="flex flex-col overflow-hidden">
-                  <h3 className="text-white font-semibold text-sm truncate">
-                    {video.title}
-                  </h3>
-                  <p className="text-gray-400 text-xs truncate">
-                    {video.owner?.username || "Unknown"}
-                  </p>
+                <div className="flex p-3">
+                  <img
+                    src={video.owner?.avatar}
+                    alt={video.owner?.username}
+                    className="w-10 h-10 rounded-full mr-3 object-cover"
+                  />
+                  <div className="flex flex-col overflow-hidden">
+                    <h3 className="text-white font-semibold text-sm truncate">
+                      {video.title}
+                    </h3>
+                    <p className="text-gray-400 text-xs truncate">
+                      {video.owner?.username || "Unknown"}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-
-          {/* No results */}
-          {videos.length === 0 && (
-            <p className="text-gray-400 col-span-full text-center">
-              Loading.....
-            </p>
-          )}
-        </div>
-        
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
