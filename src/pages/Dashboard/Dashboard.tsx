@@ -37,10 +37,15 @@ const Dashboard = () => {
 
 
   const menuItems = [
-    { name: "Home", icon: HomeIcon },
-    { name: "Dashboard", icon: ChartBarIcon },
-    { name: "Your Videos", icon: VideoCameraIcon },
+    { name: "Home", icon: HomeIcon, path: "/Dashboard" },
+    { name: "Dashboard", icon: ChartBarIcon, path: "/Dashboard" },
+    { name: "Your Videos", icon: VideoCameraIcon, path: "/Yourvideos" },
   ];
+
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    setIsOpen(false); // Close sidebar on mobile after navigation
+  };
 
   return (
     <div className="dashboard-container flex h-screen w-full">
@@ -65,6 +70,7 @@ const Dashboard = () => {
               <li
                 key={item.name}
                 className="flex items-center gap-3 text-gray-300 hover:bg-slate-700 p-2 rounded-lg cursor-pointer transition"
+                onClick={() => handleNavigation(item.path)}
               >
                 <item.icon className="h-5 w-5 text-gray-400" />
                 <span className="font-medium">{item.name}</span>
