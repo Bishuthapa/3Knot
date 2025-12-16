@@ -78,6 +78,7 @@ const Navbar = () => {
           <img
             src={avatar}
             alt="User Avatar"
+            onClick={() => navigate("/Yourvideos")}
             className="w-10 h-10 rounded-full border-2 border-green-600 cursor-pointer"
           />
         ) : (

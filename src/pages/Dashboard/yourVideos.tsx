@@ -53,6 +53,8 @@ const userId = localStorage.getItem("userId");
     { name: "Home", icon: HomeIcon, path: "/Dashboard" },
     { name: "Dashboard", icon: ChartBarIcon, path: "/Dashboard" },
     { name: "Your Videos", icon: VideoCameraIcon, path: "/Yourvideos" },
+    { name: "Tweets", icon: Bars3Icon, path: "/tweets" },
+
   ];
 
   const handleNavigation = (path: string) => {
