@@ -12,7 +12,8 @@ import Upload from './pages/Dashboard/Upload.tsx';
 import NotValidUser from './pages/NotValidUser.tsx';
 import ProtectedLayout from './pages/protectedLayout.tsx';
 import NotFound from './pages/NotFound.tsx';
-
+import Tweets from './pages/tweets/Tweets.tsx';
+import YourTweets from './pages/tweets/yourTweets.tsx';
 function App() {
 
   
@@ -35,6 +36,8 @@ function App() {
         <Route path="/YourVideos" element={<YourVideos />} />
         <Route path='/watch/:_id' element={<Watch />} />
         <Route path='/upload' element={<Upload />} />
+        <Route path='/tweets' element={<Tweets />}/>
+        <Route path='/yourTweets' element={<YourTweets />} />
       </Route>
 
        <Route path="*" element={<NotFound />} />

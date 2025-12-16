@@ -9,52 +9,53 @@ import {
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 
-interface VideoOwner {
+interface TweetOwner {
   avatar: string;
   username: string;
 }
 
-interface Video {
+interface Tweet {
   _id: string;
-  video: string;
-  thumbnail: string;
-  title: string;
-  description: string;
-  owner: VideoOwner;
+  content: string;
   createdAt: string;
+  owner: TweetOwner;
 }
 
-const YourVideos = () => {
+const YourTweets = () => {
   const navigate = useNavigate();
-  const [videos, setVideos] = useState<Video[]>([]);
+  const [tweets, setTweets] = useState<Tweet[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  const userId = localStorage.getItem("userId");
 
-const userId = localStorage.getItem("userId"); 
-
-  // Fetch your videos only
   useEffect(() => {
-    const fetchYourVideos = async () => {
-      try {
-        const res = await API.get(`/videos/user/${userId}`);
-        setVideos(res.data.data.videos || []);
-      } catch (err) {
-        console.error("Error fetching your videos:", err);
-      } finally {
+    const fetchYourTweets = async () => {
+      if (!userId) {
+        console.error("User not found");
         setLoading(false);
+        return;
+      }
+
+      try {
+        const res = await API.get(`/tweets/${userId}/tweets`);
+        setTweets(res.data.data || []); // Set tweets data
+      } catch (err) {
+        console.error("Error fetching your tweets:", err);
+      } finally {
+        setLoading(false); 
       }
     };
 
-    fetchYourVideos();
+    fetchYourTweets();
   }, [userId]);
 
   const menuItems = [
     { name: "Home", icon: HomeIcon, path: "/Dashboard" },
     { name: "Dashboard", icon: ChartBarIcon, path: "/Dashboard" },
-    { name: "Your Videos", icon: VideoCameraIcon, path: "/Yourvideos" },
-    { name: "Tweets", icon: Bars3Icon, path: "/tweets" },
-
+    { name: "Videos", icon: VideoCameraIcon, path: "/YourVideos" },
+    { name: "Tweets", icon: Bars3Icon, path: "/Tweets" },
+    { name: "Your Tweets", icon: Bars3Icon, path: "/YourTweets" },
   ];
 
   const handleNavigation = (path: string) => {
@@ -112,44 +113,39 @@ const userId = localStorage.getItem("userId");
           >
             <Bars3Icon className="h-6 w-6" />
           </button>
-          <h2 className="text-white text-xl font-bold">Your Uploaded Videos</h2>
+          <h2 className="text-white text-xl font-bold">Your Tweets</h2>
         </div>
 
-        {/* Video Grid */}
+        {/* Tweets List */}
         {loading ? (
           <p className="text-gray-400 text-center">Loading...</p>
-        ) : videos.length === 0 ? (
+        ) : tweets.length === 0 ? (
           <p className="text-gray-400 text-center">
-            You haven’t uploaded any videos yet.
+            You haven't posted any tweets yet.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {videos.map((video) => (
+          <div className="space-y-6">
+            {tweets.map((tweet) => (
               <div
-                key={video._id}
-                className="bg-gray-800 rounded-lg overflow-hidden hover:shadow-xl transition duration-300 cursor-pointer"
-                onClick={() => navigate(`/watch/${video._id}`, { state: video })}
+                key={tweet._id}
+                className="bg-gray-800 rounded-lg p-4 hover:shadow-xl transition duration-300 cursor-pointer"
               >
-                <img
-                  src={video.thumbnail}
-                  alt={video.title}
-                  className="w-full h-40 sm:h-48 object-cover"
-                />
-                <div className="flex p-3">
+                <div className="flex mb-4">
                   <img
-                    src={video.owner?.avatar}
-                    alt={video.owner?.username}
+                    src={tweet.owner?.avatar}
+                    alt={tweet.owner?.username}
                     className="w-10 h-10 rounded-full mr-3 object-cover"
                   />
                   <div className="flex flex-col overflow-hidden">
-                    <h3 className="text-white font-semibold text-sm truncate">
-                      {video.title}
+                    <h3 className="text-white font-semibold text-sm">
+                      {tweet.owner?.username || "Unknown"}
                     </h3>
-                    <p className="text-gray-400 text-xs truncate">
-                      {video.owner?.username || "Unknown"}
+                    <p className="text-gray-400 text-xs">
+                      {new Date(tweet.createdAt).toLocaleString()}
                     </p>
                   </div>
                 </div>
+                <p className="text-white">{tweet.content}</p>
               </div>
             ))}
           </div>
@@ -159,4 +155,4 @@ const userId = localStorage.getItem("userId");
   );
 };
 
-export default YourVideos;
+export default YourTweets;
